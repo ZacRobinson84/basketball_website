@@ -189,12 +189,7 @@
 
         header h1 span {
             color: #f97316;
-            font-family: 'Open Sans', sans-serif;
-            font-weight: 800;
-            font-style: italic;
-            text-transform: none;
-            font-size: 0.85em;
-            letter-spacing: -0.04em;
+            letter-spacing: 2px;
         }
 
 
@@ -230,6 +225,20 @@
                         0 0 40px rgba(249, 115, 22, 0.03);
         }
 
+        .player-card-inner::before {
+            content: "";
+            position: absolute;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            width: 60%;
+            background: url('images/playercard_portrait.jpg') no-repeat right center / cover;
+            opacity: 0.35;
+            pointer-events: none;
+            mask-image: linear-gradient(to right, transparent 0%, black 50%);
+            -webkit-mask-image: linear-gradient(to right, transparent 0%, black 50%);
+        }
+
         .player-card-jersey {
             width: 100px;
             height: 100px;
@@ -237,12 +246,22 @@
             object-fit: cover;
             border: 2px solid rgba(249, 115, 22, 0.25);
             flex-shrink: 0;
+            position: relative;
         }
 
+        .player-card-logo {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            flex-shrink: 0;
+            opacity: 0.85;
+            position: relative;
+        }
 
         .player-card-info {
             display: flex;
             flex-direction: column;
+            position: relative;
         }
 
         .player-number {
@@ -475,6 +494,53 @@
         }
 
         /* ==========================================
+           COURT SIDE IMAGES
+           ========================================== */
+        .main-with-courts {
+            position: relative;
+            flex: 1;
+        }
+
+        .court-side {
+            display: none;
+            position: fixed;
+            opacity: 0.05;
+            pointer-events: none;
+        }
+
+        .court-side-left {
+            left: -70px;
+            top: 10%;
+            width: 690px;
+            transform: rotate(90deg);
+        }
+
+        .court-side-right {
+            right: -50px;
+            top: 40%;
+            width: 754px;
+            transform: rotate(90deg);
+        }
+
+        @media (min-width: 1400px) {
+            .court-side {
+                display: block;
+            }
+        }
+
+        @media (min-width: 1700px) {
+            .court-side-left {
+                width: 906px;
+                left: -40px;
+            }
+
+            .court-side-right {
+                width: 949px;
+                right: -25px;
+            }
+        }
+
+        /* ==========================================
            FOOTER
            ========================================== */
         footer {
@@ -517,6 +583,11 @@
                 padding: 1.5rem;
             }
 
+
+            .player-card-logo {
+                width: 120px;
+                height: 120px;
+            }
 
             .player-number {
                 font-size: 2.5rem;
@@ -694,7 +765,7 @@
 
     <section class="player-card">
         <div class="player-card-inner">
-            <img class="player-card-jersey" src="images/Jersey.jpg" alt="Parker's #22 Jersey">
+            <img class="player-card-logo" src="images/assocLogo.svg" alt="Stars team logo">
             <div class="player-card-info">
                 <div class="player-number">#22</div>
                 <div class="player-name">Parker</div>
@@ -704,6 +775,9 @@
         </div>
     </section>
 
+    <div class="main-with-courts">
+        <img class="court-side court-side-left" src="images/image.jpg" alt="">
+        <img class="court-side court-side-right" src="images/image.jpg" alt="">
     <main>
         <div class="section-label"><span>//</span> Latest Clips <button class="add-clip-btn" id="addClipBtn" title="Add a clip">+</button></div>
         <div class="video-grid">
@@ -822,6 +896,7 @@
 
         </div>
     </main>
+    </div>
 
     <footer>
         <p>Go Parker! &#127936; <span>//</span> Go Stars!</p>
