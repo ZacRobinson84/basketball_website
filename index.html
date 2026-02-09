@@ -266,6 +266,52 @@
         }
 
         /* ==========================================
+           REPLAY OVERLAY
+           ========================================== */
+        .replay-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(10, 10, 18, 0.85);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.35s ease;
+        }
+
+        .replay-overlay.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .replay-btn {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            border: 3px solid #f97316;
+            background: rgba(249, 115, 22, 0.1);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.25s, box-shadow 0.25s, transform 0.25s;
+        }
+
+        .replay-btn:hover {
+            background: rgba(249, 115, 22, 0.25);
+            box-shadow: 0 0 20px rgba(249, 115, 22, 0.3);
+            transform: scale(1.1);
+        }
+
+        .replay-btn svg {
+            width: 32px;
+            height: 32px;
+            fill: #f97316;
+        }
+
+        /* ==========================================
            CARD ENTRANCE ANIMATIONS
            ========================================== */
         @keyframes cardSlideIn {
@@ -316,6 +362,9 @@
             header, .section-label, footer, .video-card {
                 animation: none;
                 opacity: 1;
+            }
+            .replay-overlay {
+                transition: none;
             }
         }
 
@@ -726,6 +775,82 @@
         })();
     </script>
 
+
+    <!-- YouTube IFrame API: custom replay button on video end -->
+    <script>
+        (function() {
+            var REPLAY_SVG = '<svg viewBox="0 0 24 24"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg>';
+
+            function prepareIframes() {
+                var wrappers = document.querySelectorAll('.video-wrapper');
+                for (var i = 0; i < wrappers.length; i++) {
+                    var wrapper = wrappers[i];
+                    var iframe = wrapper.querySelector('iframe');
+                    if (!iframe) continue;
+
+                    // Assign unique id
+                    iframe.id = 'yt-player-' + i;
+
+                    // Enable JS API on the iframe src
+                    var src = iframe.getAttribute('src') || '';
+                    if (src.indexOf('enablejsapi') === -1) {
+                        iframe.src = src + (src.indexOf('?') === -1 ? '?' : '&') + 'enablejsapi=1';
+                    }
+
+                    // Create replay overlay
+                    var overlay = document.createElement('div');
+                    overlay.className = 'replay-overlay';
+                    overlay.setAttribute('data-player-id', iframe.id);
+
+                    var btn = document.createElement('button');
+                    btn.className = 'replay-btn';
+                    btn.setAttribute('aria-label', 'Replay video');
+                    btn.innerHTML = REPLAY_SVG;
+
+                    overlay.appendChild(btn);
+                    wrapper.appendChild(overlay);
+                }
+            }
+
+            prepareIframes();
+
+            // Load YouTube IFrame API
+            var tag = document.createElement('script');
+            tag.src = 'https://www.youtube.com/iframe_api';
+            var firstScript = document.getElementsByTagName('script')[0];
+            firstScript.parentNode.insertBefore(tag, firstScript);
+
+            // Called automatically by the YouTube IFrame API once loaded
+            window.onYouTubeIframeAPIReady = function() {
+                var iframes = document.querySelectorAll('.video-wrapper iframe');
+                for (var i = 0; i < iframes.length; i++) {
+                    (function(iframe) {
+                        var wrapper = iframe.parentElement;
+                        var overlay = wrapper.querySelector('.replay-overlay');
+                        var replayBtn = overlay.querySelector('.replay-btn');
+
+                        var player = new YT.Player(iframe.id, {
+                            events: {
+                                onStateChange: function(event) {
+                                    if (event.data === YT.PlayerState.ENDED) {
+                                        overlay.classList.add('show');
+                                    } else if (event.data === YT.PlayerState.PLAYING) {
+                                        overlay.classList.remove('show');
+                                    }
+                                }
+                            }
+                        });
+
+                        replayBtn.addEventListener('click', function() {
+                            player.seekTo(0);
+                            player.playVideo();
+                            overlay.classList.remove('show');
+                        });
+                    })(iframes[i]);
+                }
+            };
+        })();
+    </script>
 
 </body>
 </html>
