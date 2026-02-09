@@ -6,7 +6,7 @@
     <title>Parker's Basketball Highlights</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700&family=Open+Sans:ital,wght@1,800&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -17,10 +17,35 @@
         body {
             font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background-color: #0a0a12;
+            background-image:
+                radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.015) 1px, transparent 0),
+                radial-gradient(ellipse at 50% 0%, rgba(249, 115, 22, 0.07) 0%, transparent 55%),
+                radial-gradient(ellipse at 80% 50%, rgba(15, 23, 42, 0.8) 0%, transparent 50%),
+                radial-gradient(circle at 20% 80%, rgba(15, 23, 42, 0.6) 0%, transparent 40%);
+            background-size: 24px 24px, 100% 100%, 100% 100%, 100% 100%;
+            background-attachment: fixed;
+            isolation: isolate;
             color: #f1f5f9;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+        }
+
+        /* ==========================================
+           COURT BACKGROUND WATERMARK
+           ========================================== */
+        .court-bg {
+            position: fixed;
+            top: 30%;
+            left: 50%;
+            width: 70vw;
+            max-width: 900px;
+            aspect-ratio: 16 / 10;
+            background: url('images/image.jpg') no-repeat center / contain;
+            opacity: 0.035;
+            transform: translate(-50%, -50%) rotate(-12deg);
+            pointer-events: none;
+            z-index: -1;
         }
 
         /* ==========================================
@@ -159,10 +184,17 @@
             color: #ffffff;
             position: relative;
             line-height: 1;
+            font-style: italic;
         }
 
         header h1 span {
             color: #f97316;
+            font-family: 'Open Sans', sans-serif;
+            font-weight: 800;
+            font-style: italic;
+            text-transform: none;
+            font-size: 0.85em;
+            letter-spacing: -0.04em;
         }
 
 
@@ -170,6 +202,80 @@
             font-size: 2rem;
             display: block;
             margin-bottom: 0.5rem;
+        }
+
+        /* ==========================================
+           PLAYER PROFILE CARD
+           ========================================== */
+        .player-card {
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 2rem 1.25rem 0;
+            opacity: 0;
+            animation: fadeIn 0.5s ease-out 2.55s forwards;
+        }
+
+        .player-card-inner {
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            background: linear-gradient(135deg, rgba(18, 18, 30, 0.95), rgba(18, 18, 30, 0.5));
+            border: 1px solid rgba(249, 115, 22, 0.15);
+            border-radius: 16px;
+            padding: 1.25rem;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3),
+                        0 0 40px rgba(249, 115, 22, 0.03);
+        }
+
+        .player-card-jersey {
+            width: 100px;
+            height: 100px;
+            border-radius: 12px;
+            object-fit: cover;
+            border: 2px solid rgba(249, 115, 22, 0.25);
+            flex-shrink: 0;
+        }
+
+
+        .player-card-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .player-number {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.2rem;
+            color: #f97316;
+            line-height: 1;
+        }
+
+        .player-name {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.5rem;
+            letter-spacing: 4px;
+            color: #ffffff;
+            text-transform: uppercase;
+            line-height: 1.1;
+        }
+
+        .player-divider {
+            width: 40px;
+            height: 2px;
+            background: rgba(249, 115, 22, 0.4);
+            margin: 0.5rem 0;
+            border-radius: 1px;
+        }
+
+        .player-team {
+            font-family: 'DM Sans', sans-serif;
+            font-size: 0.8rem;
+            color: #64748b;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            font-weight: 600;
         }
 
         /* ==========================================
@@ -359,7 +465,7 @@
         /* Accessibility: skip all animations */
         @media (prefers-reduced-motion: reduce) {
             .loader { display: none; }
-            header, .section-label, footer, .video-card {
+            header, .section-label, footer, .video-card, .player-card {
                 animation: none;
                 opacity: 1;
             }
@@ -400,6 +506,25 @@
             .section-label {
                 font-size: 1.6rem;
             }
+
+            .player-card-jersey {
+                width: 120px;
+                height: 120px;
+            }
+
+            .player-card-inner {
+                gap: 1.5rem;
+                padding: 1.5rem;
+            }
+
+
+            .player-number {
+                font-size: 2.5rem;
+            }
+
+            .player-name {
+                font-size: 1.8rem;
+            }
         }
 
         @media (min-width: 960px) {
@@ -413,6 +538,10 @@
 
             header h1 {
                 font-size: 4.5rem;
+            }
+
+            .player-card {
+                padding: 2.5rem 2rem 0;
             }
         }
         /* ==========================================
@@ -547,6 +676,8 @@
 </head>
 <body>
 
+    <div class="court-bg"></div>
+
     <!-- Bouncing basketball loading screen -->
     <div class="loader" id="loader">
         <div class="loader-court">
@@ -560,6 +691,18 @@
         <span class="ball">&#127936;</span>
         <h1>Parker's <span>Basketball</span> Highlights</h1>
     </header>
+
+    <section class="player-card">
+        <div class="player-card-inner">
+            <img class="player-card-jersey" src="images/Jersey.jpg" alt="Parker's #22 Jersey">
+            <div class="player-card-info">
+                <div class="player-number">#22</div>
+                <div class="player-name">Parker</div>
+                <div class="player-divider"></div>
+                <div class="player-team">Stars</div>
+            </div>
+        </div>
+    </section>
 
     <main>
         <div class="section-label"><span>//</span> Latest Clips <button class="add-clip-btn" id="addClipBtn" title="Add a clip">+</button></div>
