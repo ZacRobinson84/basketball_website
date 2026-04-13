@@ -4,385 +4,451 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Parker's Basketball Highlights</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>&#127936;</text></svg>">
+    <meta name="description" content="Watch Parker's best basketball highlights from the 2025-26 Shooting Stars season. Layups, steals, blocks, and more.">
+    <meta property="og:title" content="Parker's Basketball Highlights">
+    <meta property="og:description" content="Season 2025-26 Shooting Stars — layups, steals, blocks, and more.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://img.youtube.com/vi/q2goPYTCFU8/maxresdefault.jpg">
+    <meta name="twitter:card" content="summary_large_image">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700&family=Open+Sans:ital,wght@1,800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@400;500;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
     <style>
-        * {
+        /* ==========================================
+           CSS VARIABLES
+           ========================================== */
+        :root {
+            --bg: #0a0a0c;
+            --card-bg: #131318;
+            --accent: #ff6b2b;
+            --accent-glow: rgba(255, 107, 43, 0.15);
+            --accent-glow-subtle: rgba(255, 107, 43, 0.08);
+            --text-primary: #f0eef5;
+            --text-secondary: #8a8599;
+            --text-tertiary: #4a4658;
+            --radius: 12px;
+            --radius-sm: 8px;
+            --radius-pill: 100px;
+        }
+
+        /* ==========================================
+           RESET & BASE
+           ========================================== */
+        *, *::before, *::after {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
+        html {
+            scroll-behavior: smooth;
+            -webkit-text-size-adjust: 100%;
+        }
+
         body {
-            font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: #0a0a12;
-            background-image:
-                radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.015) 1px, transparent 0),
-                radial-gradient(ellipse at 50% 0%, rgba(249, 115, 22, 0.07) 0%, transparent 55%),
-                radial-gradient(ellipse at 80% 50%, rgba(15, 23, 42, 0.8) 0%, transparent 50%),
-                radial-gradient(circle at 20% 80%, rgba(15, 23, 42, 0.6) 0%, transparent 40%);
-            background-size: 24px 24px, 100% 100%, 100% 100%, 100% 100%;
-            background-attachment: fixed;
-            isolation: isolate;
-            color: #f1f5f9;
+            font-family: 'Barlow', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background-color: var(--bg);
+            color: var(--text-primary);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            overflow-x: hidden;
+            line-height: 1.5;
         }
 
-        /* ==========================================
-           COURT BACKGROUND WATERMARK
-           ========================================== */
-        .court-bg {
-            position: fixed;
-            top: 30%;
-            left: 50%;
-            width: 70vw;
-            max-width: 900px;
-            aspect-ratio: 16 / 10;
-            background: url('images/image.jpg') no-repeat center / contain;
-            opacity: 0.035;
-            transform: translate(-50%, -50%) rotate(-12deg);
-            pointer-events: none;
-            z-index: -1;
-        }
-
-        /* ==========================================
-           LOADING SCREEN - Bouncing Basketball
-           ========================================== */
-        .loader {
-            position: fixed;
-            inset: 0;
-            z-index: 1000;
-            background: #0a0a12;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            animation: loaderExit 0.6s ease-in 2.6s forwards;
-        }
-
-        .loader-court {
-            position: relative;
-            width: 120px;
-            height: 200px;
-            display: flex;
-            align-items: flex-end;
-            justify-content: center;
-        }
-
-        .loader-ball {
-            font-size: 3.5rem;
-            position: absolute;
-            bottom: 30px;
-            animation: ballBounce 1.8s cubic-bezier(0.25, 0, 0.5, 1) forwards;
-            filter: drop-shadow(0 0 8px rgba(249, 115, 22, 0.3));
-        }
-
-        .loader-shadow {
-            width: 50px;
-            height: 12px;
-            background: radial-gradient(ellipse, rgba(249, 115, 22, 0.25) 0%, transparent 70%);
-            border-radius: 50%;
-            position: absolute;
-            bottom: 18px;
-            animation: shadowPulse 1.8s cubic-bezier(0.25, 0, 0.5, 1) forwards;
-        }
-
-        .loader-text {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.8rem;
-            letter-spacing: 6px;
-            color: #f97316;
-            margin-top: 1.5rem;
-            opacity: 0;
-            animation: textReveal 0.5s ease-out 1.6s forwards;
-        }
-
-        @keyframes ballBounce {
-            0%   { bottom: 300px; transform: scaleX(1) scaleY(1); }
-            /* First hit */
-            18%  { bottom: 30px;  transform: scaleX(1) scaleY(1); }
-            21%  { bottom: 26px;  transform: scaleX(1.2) scaleY(0.75); }
-            24%  { bottom: 30px;  transform: scaleX(1) scaleY(1); }
-            /* First rise & fall */
-            40%  { bottom: 160px; transform: scaleX(1) scaleY(1); }
-            /* Second hit */
-            55%  { bottom: 30px;  transform: scaleX(1) scaleY(1); }
-            58%  { bottom: 26px;  transform: scaleX(1.15) scaleY(0.8); }
-            61%  { bottom: 30px;  transform: scaleX(1) scaleY(1); }
-            /* Second rise & fall */
-            72%  { bottom: 80px;  transform: scaleX(1) scaleY(1); }
-            /* Third hit */
-            83%  { bottom: 30px;  transform: scaleX(1) scaleY(1); }
-            85%  { bottom: 28px;  transform: scaleX(1.08) scaleY(0.9); }
-            87%  { bottom: 30px;  transform: scaleX(1) scaleY(1); }
-            /* Settle */
-            93%  { bottom: 40px; transform: scaleX(1) scaleY(1); }
-            100% { bottom: 30px; transform: scaleX(1) scaleY(1); }
-        }
-
-        @keyframes shadowPulse {
-            0%   { transform: scaleX(0.3); opacity: 0; }
-            18%  { transform: scaleX(1); opacity: 1; }
-            21%  { transform: scaleX(1.4); opacity: 0.8; }
-            24%  { transform: scaleX(1); opacity: 0.6; }
-            40%  { transform: scaleX(0.5); opacity: 0.2; }
-            55%  { transform: scaleX(1); opacity: 0.8; }
-            58%  { transform: scaleX(1.3); opacity: 0.7; }
-            61%  { transform: scaleX(1); opacity: 0.5; }
-            72%  { transform: scaleX(0.6); opacity: 0.3; }
-            83%  { transform: scaleX(1); opacity: 0.6; }
-            85%  { transform: scaleX(1.15); opacity: 0.5; }
-            87%  { transform: scaleX(1); opacity: 0.5; }
-            100% { transform: scaleX(0.8); opacity: 0.4; }
-        }
-
-        @keyframes textReveal {
-            from { opacity: 0; transform: translateY(10px); }
-            to   { opacity: 1; transform: translateY(0); }
-        }
-
-        @keyframes loaderExit {
-            0%   { opacity: 1; transform: translateY(0); }
-            100% { opacity: 0; transform: translateY(-30px); pointer-events: none; }
-        }
-
-        /* After animation, remove from flow */
-        .loader-done {
-            display: none !important;
-        }
-
-        /* ==========================================
-           HEADER
-           ========================================== */
-        header {
-            background: #0a0a12;
-            text-align: center;
-            padding: 2.5rem 1rem 2rem;
-            position: relative;
-            z-index: 1;
+        body.modal-open {
             overflow: hidden;
         }
 
-        header::after {
+        /* ==========================================
+           HERO SECTION
+           ========================================== */
+        .hero {
+            text-align: center;
+            padding: 4rem 1rem 3rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 500px;
+            height: 400px;
+            background: radial-gradient(ellipse, rgba(255, 107, 43, 0.12) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+            animation: glowPulse 4s ease-in-out infinite;
+        }
+
+        @keyframes glowPulse {
+            0%, 100% { opacity: 1; transform: translateX(-50%) scale(1); }
+            50% { opacity: 0.6; transform: translateX(-50%) scale(1.08); }
+        }
+
+        .hero::after {
             content: "";
             position: absolute;
             bottom: 0;
             left: 0;
             right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, transparent 0%, #f97316 30%, #fb923c 50%, #f97316 70%, transparent 100%);
-        }
-
-        header h1 {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 3rem;
-            font-weight: 400;
-            text-transform: uppercase;
-            letter-spacing: 6px;
-            color: #ffffff;
-            position: relative;
-            line-height: 1;
-            font-style: italic;
-        }
-
-        header h1 span {
-            color: #f97316;
-            letter-spacing: 2px;
-        }
-
-
-        .ball {
-            font-size: 2rem;
-            display: block;
-            margin-bottom: 0.5rem;
-        }
-
-        /* ==========================================
-           PLAYER PROFILE CARD
-           ========================================== */
-        .player-card {
-            max-width: 1200px;
-            width: 100%;
-            margin: 0 auto;
-            padding: 2rem 1.25rem 0;
-            opacity: 0;
-            animation: fadeIn 0.5s ease-out 2.55s forwards;
-        }
-
-        .player-card-inner {
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            gap: 1.25rem;
-            background: linear-gradient(135deg, rgba(18, 18, 30, 0.95), rgba(18, 18, 30, 0.5));
-            border: 1px solid rgba(249, 115, 22, 0.15);
-            border-radius: 16px;
-            padding: 1.25rem;
-            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3),
-                        0 0 40px rgba(249, 115, 22, 0.03);
-        }
-
-        .player-card-inner::before {
-            content: "";
-            position: absolute;
-            right: -20%;
-            top: 0;
-            bottom: 0;
-            width: 120%;
-            background: url('images/playercard_portrait.jpg') no-repeat 30% center / cover;
-            opacity: 0.35;
-            pointer-events: none;
-            mask-image: linear-gradient(to right, transparent 0%, black 50%);
-            -webkit-mask-image: linear-gradient(to right, transparent 0%, black 50%);
-        }
-
-        .player-card-jersey {
-            width: 100px;
-            height: 100px;
-            border-radius: 12px;
-            object-fit: cover;
-            border: 2px solid rgba(249, 115, 22, 0.25);
-            flex-shrink: 0;
-            position: relative;
-        }
-
-        .player-card-logo {
-            width: 100px;
-            height: 100px;
-            object-fit: contain;
-            flex-shrink: 0;
-            opacity: 0.85;
-            position: relative;
-        }
-
-        .player-card-info {
-            display: flex;
-            flex-direction: column;
-            position: relative;
-        }
-
-        .player-number {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 2.2rem;
-            color: #f97316;
-            line-height: 1;
-        }
-
-        .player-name {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.5rem;
-            letter-spacing: 4px;
-            color: #ffffff;
-            text-transform: uppercase;
-            line-height: 1.1;
-        }
-
-        .player-divider {
-            width: 40px;
             height: 2px;
-            background: rgba(249, 115, 22, 0.4);
-            margin: 0.5rem 0;
-            border-radius: 1px;
+            background: linear-gradient(90deg, transparent 0%, var(--accent) 30%, var(--accent) 70%, transparent 100%);
+            opacity: 0.5;
         }
 
-        .player-team {
-            font-family: 'DM Sans', sans-serif;
-            font-size: 0.8rem;
-            color: #64748b;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            font-weight: 600;
-        }
-
-        /* ==========================================
-           MAIN CONTENT
-           ========================================== */
-        main {
-            flex: 1;
-            max-width: 1200px;
-            width: 100%;
-            margin: 0 auto;
-            padding: 2.5rem 1.25rem;
-        }
-
-        .section-label {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.4rem;
-            letter-spacing: 4px;
-            color: #64748b;
-            margin-bottom: 1.5rem;
-            padding-left: 0.25rem;
-        }
-
-        .section-label span {
-            color: #f97316;
-        }
-
-        /* ==========================================
-           VIDEO GRID
-           ========================================== */
-        .video-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 1.25rem;
-        }
-
-        .video-card {
-            background: #12121e;
-            border-radius: 12px;
-            overflow: hidden;
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
-            transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-                        box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-                        border-color 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-            opacity: 0;
-            animation: cardSlideIn 0.5s ease-out forwards;
-        }
-
-        .video-card:hover {
-            transform: translateY(-6px) scale(1.015);
-            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5),
-                        0 0 20px rgba(249, 115, 22, 0.1);
-            border-color: rgba(249, 115, 22, 0.25);
-        }
-
-        .video-card h3 {
-            padding: 0.75rem 1rem;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 0.85rem;
-            color: #f97316;
-            font-weight: 600;
-            letter-spacing: 0.3px;
-            display: flex;
+        .hero-badge {
+            display: inline-flex;
             align-items: center;
             gap: 0.5rem;
+            background: rgba(255, 107, 43, 0.1);
+            border: 1px solid rgba(255, 107, 43, 0.2);
+            border-radius: var(--radius-pill);
+            padding: 0.4rem 1.2rem;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+            opacity: 0;
+            animation: fadeDown 0.5s ease-out 0.2s forwards;
         }
 
-        .video-card h3::before {
+        .hero-title {
+            font-family: 'Bebas Neue', sans-serif;
+            line-height: 0.9;
+            position: relative;
+            z-index: 1;
+            opacity: 0;
+            animation: fadeDown 0.5s ease-out 0.4s forwards;
+        }
+
+        .hero-title .line1 {
+            display: block;
+            font-size: clamp(48px, 12vw, 80px);
+            color: #ffffff;
+            letter-spacing: 6px;
+        }
+
+        .hero-title .line2 {
+            display: block;
+            font-size: clamp(48px, 12vw, 80px);
+            color: var(--accent);
+            letter-spacing: 6px;
+        }
+
+        .hero-detail {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            margin-top: 1rem;
+            position: relative;
+            z-index: 1;
+            opacity: 0;
+            animation: fadeDown 0.5s ease-out 0.6s forwards;
+        }
+
+        .hero-detail .number {
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        /* ==========================================
+           CLIPS SECTION
+           ========================================== */
+        .clips-section {
+            max-width: 780px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 2.5rem 1rem;
+            opacity: 0;
+            animation: fadeUp 0.5s ease-out 0.8s forwards;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.25rem;
+        }
+
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .section-title::before {
             content: "";
             width: 3px;
-            height: 14px;
-            background: #f97316;
+            height: 20px;
+            background: var(--accent);
             border-radius: 2px;
             flex-shrink: 0;
         }
 
-        /* ==========================================
-           VIDEO WRAPPER (9:16 Shorts)
-           ========================================== */
-        .video-wrapper {
-            position: relative;
-            width: 100%;
-            padding-top: 177.78%;
-            background: #000000;
+        .section-title h2 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.5rem;
+            letter-spacing: 3px;
+            color: var(--text-primary);
+            font-weight: 400;
         }
 
-        .video-wrapper iframe {
+        .clip-count {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 600;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: var(--text-tertiary);
+        }
+
+        /* Tag Filters */
+        .tag-filters {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.25rem;
+            overflow-x: auto;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+            padding-bottom: 0.25rem;
+        }
+
+        .tag-filters::-webkit-scrollbar {
+            display: none;
+        }
+
+        .tag-btn {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 0.4rem 1rem;
+            border-radius: var(--radius-pill);
+            border: 1px solid var(--text-tertiary);
+            background: transparent;
+            color: var(--text-secondary);
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s ease;
+        }
+
+        .tag-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .tag-btn.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fff;
+        }
+
+        /* Clip Grid */
+        .clip-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .clip-card {
+            background: var(--card-bg);
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            cursor: pointer;
+            transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+            opacity: 0;
+            animation: fadeUp 0.5s ease-out forwards;
+        }
+
+        .clip-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4),
+                        0 0 20px var(--accent-glow-subtle);
+            border-color: rgba(255, 107, 43, 0.2);
+        }
+
+        .clip-card.hidden {
+            display: none;
+        }
+
+        .clip-thumb {
+            position: relative;
+            width: 100%;
+            padding-top: 100%; /* Square thumbnails — compact browse */
+            background: #0d0d10;
+            overflow: hidden;
+        }
+
+        .clip-thumb img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .play-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 16px rgba(255, 107, 43, 0.3);
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .play-btn svg {
+            width: 16px;
+            height: 16px;
+            fill: #fff;
+            margin-left: 2px;
+        }
+
+        .clip-card:hover .play-btn {
+            transform: translate(-50%, -50%) scale(1.1);
+            box-shadow: 0 6px 24px rgba(255, 107, 43, 0.5);
+        }
+
+        .clip-info {
+            padding: 0.5rem 0.6rem;
+        }
+
+        .clip-title {
+            font-family: 'Barlow', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            line-height: 1.3;
+        }
+
+        .clip-meta {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 0.2rem;
+        }
+
+        .clip-date {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 0.65rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--text-tertiary);
+        }
+
+        .clip-tag {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 0.6rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 0.1rem 0.45rem;
+            border-radius: var(--radius-pill);
+            background: rgba(255, 107, 43, 0.15);
+            color: var(--accent);
+        }
+
+        /* ==========================================
+           VIDEO MODAL
+           ========================================== */
+        .modal-backdrop {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.92);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-backdrop.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-backdrop.entering {
+            opacity: 0;
+        }
+
+        .modal-container {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            transform: translateY(20px) scale(0.97);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-backdrop.active .modal-container {
+            transform: translateY(0) scale(1);
+        }
+
+        .modal-backdrop.entering .modal-container {
+            transform: translateY(20px) scale(0.97);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: -44px;
+            right: 0;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s ease;
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .modal-video {
+            position: relative;
+            width: 100%;
+            padding-top: 177.78%; /* 9:16 portrait for Shorts */
+            background: #000;
+            border-radius: var(--radius) var(--radius) 0 0;
+            overflow: hidden;
+        }
+
+        .modal-video iframe {
             position: absolute;
             top: 0;
             left: 0;
@@ -391,154 +457,42 @@
             border: none;
         }
 
-        /* ==========================================
-           REPLAY OVERLAY
-           ========================================== */
-        .replay-overlay {
-            position: absolute;
-            inset: 0;
-            background: rgba(10, 10, 18, 0.85);
+        .modal-info {
+            background: var(--card-bg);
+            padding: 1rem 1.25rem;
+            border-radius: 0 0 var(--radius) var(--radius);
             display: flex;
             align-items: center;
-            justify-content: center;
-            z-index: 10;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.35s ease;
+            gap: 0.75rem;
+            flex-wrap: wrap;
         }
 
-        .replay-overlay.show {
-            opacity: 1;
-            pointer-events: auto;
+        .modal-title {
+            font-family: 'Barlow', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-primary);
         }
 
-        .replay-btn {
-            width: 72px;
-            height: 72px;
-            border-radius: 50%;
-            border: 3px solid #f97316;
-            background: rgba(249, 115, 22, 0.1);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background 0.25s, box-shadow 0.25s, transform 0.25s;
+        .modal-date {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 0.8rem;
+            font-weight: 500;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--text-tertiary);
         }
 
-        .replay-btn:hover {
-            background: rgba(249, 115, 22, 0.25);
-            box-shadow: 0 0 20px rgba(249, 115, 22, 0.3);
-            transform: scale(1.1);
-        }
-
-        .replay-btn svg {
-            width: 32px;
-            height: 32px;
-            fill: #f97316;
-        }
-
-        /* ==========================================
-           CARD ENTRANCE ANIMATIONS
-           ========================================== */
-        @keyframes cardSlideIn {
-            from {
-                opacity: 0;
-                transform: translateY(24px) scale(0.97);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-
-        .video-card:nth-child(1)  { animation-delay: 2.7s; }
-        .video-card:nth-child(2)  { animation-delay: 2.8s; }
-        .video-card:nth-child(3)  { animation-delay: 2.9s; }
-        .video-card:nth-child(4)  { animation-delay: 3.0s; }
-        .video-card:nth-child(5)  { animation-delay: 3.1s; }
-        .video-card:nth-child(6)  { animation-delay: 3.2s; }
-        .video-card:nth-child(7)  { animation-delay: 3.3s; }
-        .video-card:nth-child(8)  { animation-delay: 3.4s; }
-        .video-card:nth-child(9)  { animation-delay: 3.5s; }
-
-        /* Header also fades in after loader */
-        header {
-            opacity: 0;
-            animation: fadeIn 0.6s ease-out 2.5s forwards;
-        }
-
-        .section-label {
-            opacity: 0;
-            animation: fadeIn 0.4s ease-out 2.6s forwards;
-        }
-
-        footer {
-            opacity: 0;
-            animation: fadeIn 0.4s ease-out 3.6s forwards;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to   { opacity: 1; }
-        }
-
-        /* Accessibility: skip all animations */
-        @media (prefers-reduced-motion: reduce) {
-            .loader { display: none; }
-            header, .section-label, footer, .video-card, .player-card {
-                animation: none;
-                opacity: 1;
-            }
-            .replay-overlay {
-                transition: none;
-            }
-        }
-
-        /* ==========================================
-           COURT SIDE IMAGES
-           ========================================== */
-        .main-with-courts {
-            position: relative;
-            flex: 1;
-        }
-
-        .court-side {
-            display: none;
-            position: fixed;
-            opacity: 0.05;
-            pointer-events: none;
-        }
-
-        .court-side-left {
-            left: -70px;
-            top: 10%;
-            width: 690px;
-            transform: rotate(90deg);
-        }
-
-        .court-side-right {
-            right: -50px;
-            top: 40%;
-            width: 754px;
-            transform: rotate(90deg);
-        }
-
-        @media (min-width: 1400px) {
-            .court-side {
-                display: block;
-            }
-        }
-
-        @media (min-width: 1700px) {
-            .court-side-left {
-                width: 906px;
-                left: -40px;
-            }
-
-            .court-side-right {
-                width: 949px;
-                right: -25px;
-            }
+        .modal-tag {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 0.65rem;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 0.2rem 0.7rem;
+            border-radius: var(--radius-pill);
+            background: rgba(255, 107, 43, 0.15);
+            color: var(--accent);
         }
 
         /* ==========================================
@@ -547,527 +501,416 @@
         footer {
             text-align: center;
             padding: 2rem 1rem;
-            color: #64748b;
-            font-size: 0.8rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.06);
-            letter-spacing: 1px;
+            padding-bottom: calc(2rem + env(safe-area-inset-bottom, 0px));
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            margin-top: auto;
         }
 
-        footer span {
-            color: #f97316;
+        footer p {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 500;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--text-tertiary);
         }
 
-        /* ==========================================
-           RESPONSIVE
-           ========================================== */
-        @media (min-width: 600px) {
-            .video-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            header h1 {
-                font-size: 4rem;
-                letter-spacing: 8px;
-            }
-
-            .section-label {
-                font-size: 1.6rem;
-            }
-
-            .player-card-jersey {
-                width: 120px;
-                height: 120px;
-            }
-
-            .player-card-inner {
-                gap: 1.5rem;
-                padding: 1.5rem;
-            }
-
-
-            .player-card-logo {
-                width: 120px;
-                height: 120px;
-            }
-
-            .player-number {
-                font-size: 2.5rem;
-            }
-
-            .player-name {
-                font-size: 1.8rem;
-            }
+        .footer-brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            color: var(--text-secondary);
+            font-weight: 700;
+            letter-spacing: 4px;
         }
 
-        @media (min-width: 960px) {
-            .video-grid {
-                grid-template-columns: repeat(3, 1fr);
-            }
-
-            main {
-                padding: 3rem 2rem;
-            }
-
-            header h1 {
-                font-size: 4.5rem;
-            }
-
-            .player-card {
-                padding: 2.5rem 2rem 0;
-            }
-        }
-        /* ==========================================
-           ADD CLIP BUTTON & MODAL
-           ========================================== */
-        .add-clip-btn {
+        .footer-logo {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            border: 2px solid #f97316;
-            background: transparent;
-            color: #f97316;
-            font-size: 1.2rem;
-            font-weight: 700;
-            cursor: pointer;
-            margin-left: 0.5rem;
-            vertical-align: middle;
-            line-height: 1;
-            transition: background 0.2s, color 0.2s;
-        }
-
-        .add-clip-btn:hover {
-            background: #f97316;
-            color: #0a0a12;
-        }
-
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            z-index: 900;
-            background: rgba(0, 0, 0, 0.75);
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal-overlay.active {
-            display: flex;
-        }
-
-        .modal {
-            background: #12121e;
-            border: 1px solid rgba(249, 115, 22, 0.3);
-            border-radius: 12px;
-            padding: 2rem;
-            width: 90%;
-            max-width: 400px;
-            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.6);
-        }
-
-        .modal h2 {
+            width: 16px;
+            height: 16px;
+            border-radius: 3px;
+            background: var(--accent);
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 1.6rem;
-            letter-spacing: 3px;
-            color: #f97316;
-            margin-bottom: 1.5rem;
+            font-size: 0.55rem;
+            color: #fff;
+            letter-spacing: 0;
+            line-height: 1;
         }
 
-        .modal label {
-            display: block;
-            font-size: 0.8rem;
-            color: #94a3b8;
-            margin-bottom: 0.3rem;
-            letter-spacing: 0.5px;
+        /* ==========================================
+           MOBILE TAP STATE
+           ========================================== */
+        @media (hover: none) {
+            .clip-card:hover {
+                transform: none;
+                box-shadow: none;
+                border-color: rgba(255, 255, 255, 0.04);
+            }
+
+            .clip-card:hover .play-btn {
+                transform: translate(-50%, -50%);
+                box-shadow: 0 4px 16px rgba(255, 107, 43, 0.3);
+            }
+
+            .clip-card:active {
+                transform: scale(0.97);
+            }
+
+            .clip-card:active .play-btn {
+                transform: translate(-50%, -50%) scale(0.9);
+            }
         }
 
-        .modal input {
-            width: 100%;
-            padding: 0.6rem 0.75rem;
-            margin-bottom: 1rem;
-            border-radius: 6px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            background: #0a0a12;
-            color: #f1f5f9;
-            font-family: 'DM Sans', sans-serif;
+        /* ==========================================
+           EMPTY STATE
+           ========================================== */
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 3rem 1rem;
+        }
+
+        .empty-state p {
+            font-family: 'Barlow Condensed', sans-serif;
             font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--text-tertiary);
         }
 
-        .modal input:focus {
-            outline: none;
-            border-color: #f97316;
+        /* ==========================================
+           ANIMATIONS
+           ========================================== */
+        @keyframes fadeDown {
+            from {
+                opacity: 0;
+                transform: translateY(-16px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        .modal-actions {
-            display: flex;
-            gap: 0.75rem;
-            margin-top: 0.5rem;
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        .modal-actions button {
-            flex: 1;
-            padding: 0.6rem 1rem;
-            border-radius: 6px;
-            font-family: 'DM Sans', sans-serif;
-            font-size: 0.85rem;
-            font-weight: 600;
-            cursor: pointer;
-            border: none;
+        @media (prefers-reduced-motion: reduce) {
+            .hero-badge, .hero-title, .hero-detail,
+            .clips-section, .clip-card, .hero::before {
+                animation: none !important;
+                opacity: 1 !important;
+            }
+            .modal-backdrop, .modal-container {
+                transition: none !important;
+            }
         }
 
-        .btn-submit {
-            background: #f97316;
-            color: #0a0a12;
+        /* ==========================================
+           RESPONSIVE — TABLET (600px+)
+           ========================================== */
+        @media (min-width: 600px) {
+            .clip-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 14px;
+            }
+
+            .clips-section {
+                padding: 3rem 2rem;
+            }
+
+            .hero {
+                padding: 5rem 2rem 3.5rem;
+            }
+
+            .play-btn {
+                width: 48px;
+                height: 48px;
+            }
+
+            .play-btn svg {
+                width: 18px;
+                height: 18px;
+            }
+
+            .clip-info {
+                padding: 0.6rem 0.75rem;
+            }
+
+            .clip-title {
+                font-size: 0.8rem;
+            }
         }
 
-        .btn-submit:hover {
-            background: #fb923c;
+        /* ==========================================
+           RESPONSIVE — DESKTOP (900px+)
+           ========================================== */
+        @media (min-width: 900px) {
+            .clip-grid {
+                gap: 16px;
+            }
+
+            .clips-section {
+                padding: 3.5rem 2rem;
+            }
+
+            .hero {
+                padding: 6rem 2rem 4rem;
+            }
         }
 
-        .btn-cancel {
-            background: transparent;
-            color: #94a3b8;
-            border: 1px solid rgba(255, 255, 255, 0.1) !important;
-        }
+        /* ==========================================
+           RESPONSIVE — MODAL MOBILE (<480px)
+           ========================================== */
+        @media (max-width: 479px) {
+            .modal-backdrop {
+                padding: 0;
+                align-items: stretch;
+            }
 
-        .btn-cancel:hover {
-            border-color: rgba(255, 255, 255, 0.25) !important;
-            color: #f1f5f9;
-        }
+            .modal-container {
+                max-width: none;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                height: 100%;
+                padding: 2.5rem 0 0;
+            }
 
-        .modal-error {
-            color: #ef4444;
-            font-size: 0.8rem;
-            margin-bottom: 0.75rem;
-            min-height: 1.2em;
-        }
+            .modal-video {
+                border-radius: 0;
+                /* Fill available height: use vh-based calc so video is as tall as possible */
+                padding-top: 0;
+                flex: 1;
+                min-height: 0;
+            }
 
+            .modal-video iframe {
+                position: absolute;
+                inset: 0;
+                width: 100%;
+                height: 100%;
+            }
+
+            .modal-info {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.4rem;
+                border-radius: 0;
+                padding-bottom: calc(0.75rem + env(safe-area-inset-bottom, 0px));
+            }
+
+            .modal-close {
+                top: 0.5rem;
+                right: 0.5rem;
+                z-index: 10;
+                background: rgba(0, 0, 0, 0.5);
+            }
+        }
     </style>
 </head>
 <body>
 
-    <div class="court-bg"></div>
+    <!-- ==========================================
+         HERO SECTION
+         ========================================== -->
+    <section class="hero">
+        <div class="hero-badge">&#127936; Shooting Stars Basketball</div>
+        <h1 class="hero-title">
+            <span class="line1">PARKER</span>
+            <span class="line2">HIGHLIGHTS</span>
+        </h1>
+        <p class="hero-detail"><span class="number">#22</span> &middot; Season 2025&ndash;26</p>
+    </section>
 
-    <!-- Bouncing basketball loading screen -->
-    <div class="loader" id="loader">
-        <div class="loader-court">
-            <div class="loader-ball">&#127936;</div>
-            <div class="loader-shadow"></div>
-        </div>
-    </div>
-
-    <header>
-        <span class="ball">&#127936;</span>
-        <h1>Parker's <span>Basketball</span> Highlights</h1>
-    </header>
-
-    <section class="player-card">
-        <div class="player-card-inner">
-            <img class="player-card-logo" src="images/assocLogo.svg" alt="Stars team logo">
-            <div class="player-card-info">
-                <div class="player-number">#22</div>
-                <div class="player-name">Parker</div>
-                <div class="player-divider"></div>
-                <div class="player-team">Stars</div>
+    <!-- ==========================================
+         CLIPS SECTION
+         ========================================== -->
+    <section class="clips-section">
+        <div class="section-header">
+            <div class="section-title">
+                <h2>Latest Clips</h2>
             </div>
+            <span class="clip-count" id="clipCountLabel">12 clips</span>
+        </div>
+
+        <div class="tag-filters" id="tagFilters">
+            <!-- Rendered by JS with counts -->
+        </div>
+
+        <div class="clip-grid" id="clipGrid">
+            <!-- Clips rendered by JS -->
         </div>
     </section>
 
-    <div class="main-with-courts">
-        <img class="court-side court-side-left" src="images/image.jpg" alt="">
-        <img class="court-side court-side-right" src="images/image.jpg" alt="">
-    <main>
-        <div class="section-label"><span>//</span> Latest Clips <button class="add-clip-btn" id="addClipBtn" title="Add a clip">+</button></div>
-        <div class="video-grid">
-
-            <!--
-                ============================================================
-                HOW TO ADD A NEW CLIP:
-                ============================================================
-                Option A: Click the "+" button on the page (needs password)
-                Option B: Manually copy a video-card block below:
-                  1. Copy a <div class="video-card"> block
-                  2. Get the video ID from the YouTube Shorts URL:
-                     https://youtube.com/shorts/VIDEO_ID_HERE
-                  3. Give the div a unique id (yt-0, yt-1, etc.) and put
-                     the video ID in the data-video-id attribute
-                  4. Update the title in the <h3>
-                ============================================================
-            -->
-            <!-- NEW CLIPS HERE -->
-
-            <!-- Clip 12: Wrestle for the Ball - Feb 8 -->
-            <div class="video-card">
-                <div class="video-wrapper">
-                    <iframe src="https://www.youtube.com/embed/YfqaPLXb5OQ" allowfullscreen></iframe>
-                </div>
-                <h3>Wrestle for the Ball - Feb 8</h3>
-            </div>
-
-            <!-- Clip 11: Quick to the Paint Layup - Feb 8 -->
-            <div class="video-card">
-                <div class="video-wrapper">
-                    <iframe src="https://www.youtube.com/embed/q2goPYTCFU8" allowfullscreen></iframe>
-                </div>
-                <h3>Quick to the Paint Layup - Feb 8</h3>
-            </div>
-
-            <!-- Clip 10: Great play - Feb 8 -->
-            <div class="video-card">
-                <div class="video-wrapper">
-                    <iframe src="https://www.youtube.com/embed/aRYveQX8mrk" allowfullscreen></iframe>
-                </div>
-                <h3>Great play - Feb 8</h3>
-            </div>
-
-            <!-- Clip 9: Epic Block - Feb 1 -->
-            <div class="video-card">
-                <div class="video-wrapper">
-                    <iframe src="https://www.youtube.com/embed/wO08Zoo8_yI" allowfullscreen></iframe>
-                </div>
-                <h3>Epic Block - Feb 1</h3>
-            </div>
-
-            <!-- Clip 8: 3 Pointer 2 - Feb 1 -->
-            <div class="video-card">
-                <div class="video-wrapper">
-                    <iframe src="https://www.youtube.com/embed/mfPTIPFJ3Q4" allowfullscreen></iframe>
-                </div>
-                <h3>3 Pointer 2 - Feb 1</h3>
-            </div>
-
-            <!-- Clip 7: 3 pointer 1 - Feb 1 -->
-            <div class="video-card">
-                <div class="video-wrapper">
-                    <iframe src="https://www.youtube.com/embed/fSjj15HjwOc" allowfullscreen></iframe>
-                </div>
-                <h3>3 pointer 1 - Feb 1</h3>
-            </div>
-
-            <!-- Clip 6: Put Back - Feb 1 -->
-            <div class="video-card">
-                <div class="video-wrapper">
-                    <iframe src="https://www.youtube.com/embed/1cuSjBGRdqg" allowfullscreen></iframe>
-                </div>
-                <h3>Put Back - Feb 1</h3>
-            </div>
-
-            <!-- Clip 5: Layup 1 Feb 1st #basketball -->
-            <div class="video-card">
-                <div class="video-wrapper">
-                    <iframe src="https://www.youtube.com/embed/C2wvALNrk_A" allowfullscreen></iframe>
-                </div>
-                <h3>Layup 1 Feb 1st #basketball</h3>
-            </div>
-
-            <!-- Clip 4: Steal/Lay Up -->
-            <div class="video-card">
-                <div class="video-wrapper">
-                    <iframe src="https://www.youtube.com/embed/7wyL8ckP4Gg" allowfullscreen></iframe>
-                </div>
-                <h3>Steal/Lay Up</h3>
-            </div>
-
-            <!-- Clip 3: Steal/Foul/Both Free Throws/Steal/Foul -->
-            <div class="video-card">
-                <div class="video-wrapper">
-                    <iframe src="https://www.youtube.com/embed/N6NF9gWMfGY" allowfullscreen></iframe>
-                </div>
-                <h3>Steal/Foul/Both Free Throws/Steal/Foul</h3>
-            </div>
-
-            <!-- Clip 2: Steal / Foul / Both Free Throws -->
-            <div class="video-card">
-                <div class="video-wrapper">
-                    <iframe src="https://www.youtube.com/embed/2Ys3XeLCoc0" allowfullscreen></iframe>
-                </div>
-                <h3>Steal / Foul / Both Free Throws</h3>
-            </div>
-
-            <!-- Clip 1: Lay-up! -->
-            <div class="video-card">
-                <div class="video-wrapper">
-                    <iframe src="https://www.youtube.com/embed/tzybTPNs5iI" allowfullscreen></iframe>
-                </div>
-                <h3>Lay-up!</h3>
-            </div>
-
-        </div>
-    </main>
-    </div>
-
+    <!-- ==========================================
+         FOOTER
+         ========================================== -->
     <footer>
-        <p>Go Parker! &#127936; <span>//</span> Go Stars!</p>
+        <p>Built by <span class="footer-brand"><span class="footer-logo">PD</span>PARKER'S DAD</span></p>
     </footer>
 
-    <!-- Add Clip Modal -->
-    <div class="modal-overlay" id="clipModal">
-        <div class="modal">
-            <h2>Add New Clip</h2>
-            <div class="modal-error" id="modalError"></div>
-            <label for="clipPassword">Password</label>
-            <input type="password" id="clipPassword" placeholder="Enter password">
-            <label for="clipUrl">YouTube Shorts URL</label>
-            <input type="text" id="clipUrl" placeholder="https://youtube.com/shorts/...">
-            <label for="clipTitle">Clip Title</label>
-            <input type="text" id="clipTitle" placeholder="e.g. Sick Crossover - Feb 8">
-            <div class="modal-actions">
-                <button class="btn-cancel" id="modalCancel">Cancel</button>
-                <button class="btn-submit" id="modalSubmit">Add Clip</button>
+    <!-- ==========================================
+         VIDEO MODAL
+         ========================================== -->
+    <div class="modal-backdrop" id="videoModal">
+        <div class="modal-container">
+            <button class="modal-close" id="modalClose">&times;</button>
+            <div class="modal-video" id="modalVideo"></div>
+            <div class="modal-info">
+                <span class="modal-title" id="modalTitle"></span>
+                <span class="modal-date" id="modalDate"></span>
+                <span class="modal-tag" id="modalTag"></span>
             </div>
         </div>
     </div>
 
     <script>
-        // Remove loader from DOM after animation completes
-        document.getElementById('loader').addEventListener('animationend', function(e) {
-            if (e.animationName === 'loaderExit') {
-                this.classList.add('loader-done');
+        // ==========================================
+        // CLIP DATA
+        // ==========================================
+        var clips = [
+            { id: 1,  title: "Wrestle for the Ball",                    date: "Feb 8",  tag: "HUSTLE",  videoId: "YfqaPLXb5OQ" },
+            { id: 2,  title: "Quick to the Paint Layup",                date: "Feb 8",  tag: "OFFENSE", videoId: "q2goPYTCFU8" },
+            { id: 3,  title: "Great Play",                              date: "Feb 8",  tag: "OFFENSE", videoId: "aRYveQX8mrk" },
+            { id: 4,  title: "Epic Block",                              date: "Feb 1",  tag: "DEFENSE", videoId: "wO08Zoo8_yI" },
+            { id: 5,  title: "3 Pointer",                               date: "Feb 1",  tag: "OFFENSE", videoId: "mfPTIPFJ3Q4" },
+            { id: 6,  title: "3 Pointer",                               date: "Feb 1",  tag: "OFFENSE", videoId: "fSjj15HjwOc" },
+            { id: 7,  title: "Put Back",                                date: "Feb 1",  tag: "OFFENSE", videoId: "1cuSjBGRdqg" },
+            { id: 8,  title: "Fast Break Layup",                        date: "Feb 1",  tag: "OFFENSE", videoId: "C2wvALNrk_A" },
+            { id: 9,  title: "Steal and Lay Up",                        date: "Jan 25", tag: "OFFENSE", videoId: "7wyL8ckP4Gg" },
+            { id: 10, title: "Steal, Free Throws, Steal",               date: "Jan 25", tag: "HUSTLE",  videoId: "N6NF9gWMfGY" },
+            { id: 11, title: "Steal and Both Free Throws",              date: "Jan 25", tag: "OFFENSE", videoId: "2Ys3XeLCoc0" },
+            { id: 12, title: "Lay-up!",                                 date: "Jan 18", tag: "OFFENSE", videoId: "tzybTPNs5iI" }
+        ];
+
+        // ==========================================
+        // TAG COUNTS & FILTER BUTTONS
+        // ==========================================
+        var tags = ['ALL', 'OFFENSE', 'DEFENSE', 'HUSTLE'];
+        var tagCounts = {};
+        tags.forEach(function(t) {
+            tagCounts[t] = t === 'ALL' ? clips.length : clips.filter(function(c) { return c.tag === t; }).length;
+        });
+
+        var filtersContainer = document.getElementById('tagFilters');
+        tags.forEach(function(t) {
+            var btn = document.createElement('button');
+            btn.className = 'tag-btn' + (t === 'ALL' ? ' active' : '');
+            btn.setAttribute('data-tag', t);
+            btn.textContent = (t === 'ALL' ? 'All' : t.charAt(0) + t.slice(1).toLowerCase()) + ' (' + tagCounts[t] + ')';
+            filtersContainer.appendChild(btn);
+        });
+
+        // ==========================================
+        // RENDER CLIPS
+        // ==========================================
+        var grid = document.getElementById('clipGrid');
+
+        function renderClips(filter) {
+            grid.innerHTML = '';
+            var visible = filter === 'ALL' ? clips : clips.filter(function(c) { return c.tag === filter; });
+
+            document.getElementById('clipCountLabel').textContent = visible.length + ' clip' + (visible.length !== 1 ? 's' : '');
+
+            if (visible.length === 0) {
+                grid.innerHTML = '<div class="empty-state"><p>No clips yet</p></div>';
+                return;
+            }
+
+            visible.forEach(function(clip, i) {
+                var card = document.createElement('div');
+                card.className = 'clip-card';
+                card.style.animationDelay = (0.9 + i * 0.06) + 's';
+                card.setAttribute('data-id', clip.id);
+
+                card.innerHTML =
+                    '<div class="clip-thumb">' +
+                        '<img src="https://img.youtube.com/vi/' + clip.videoId + '/hqdefault.jpg"' +
+                        ' alt="' + clip.title + '" loading="lazy">' +
+                        '<div class="play-btn"><svg viewBox="0 0 24 24"><polygon points="8,5 19,12 8,19"/></svg></div>' +
+                    '</div>' +
+                    '<div class="clip-info">' +
+                        '<div class="clip-title">' + clip.title + '</div>' +
+                        '<div class="clip-meta">' +
+                            '<span class="clip-date">' + clip.date + '</span>' +
+                            '<span class="clip-tag">' + clip.tag + '</span>' +
+                        '</div>' +
+                    '</div>';
+
+                card.addEventListener('click', function() {
+                    openModal(clip);
+                });
+
+                grid.appendChild(card);
+            });
+        }
+
+        renderClips('ALL');
+
+        // ==========================================
+        // TAG FILTER CLICKS
+        // ==========================================
+        filtersContainer.addEventListener('click', function(e) {
+            var btn = e.target.closest('.tag-btn');
+            if (!btn) return;
+            filtersContainer.querySelectorAll('.tag-btn').forEach(function(b) { b.classList.remove('active'); });
+            btn.classList.add('active');
+            renderClips(btn.getAttribute('data-tag'));
+        });
+
+        // ==========================================
+        // VIDEO MODAL
+        // ==========================================
+        var modal = document.getElementById('videoModal');
+        var modalVideo = document.getElementById('modalVideo');
+        var modalTitle = document.getElementById('modalTitle');
+        var modalDate = document.getElementById('modalDate');
+        var modalTag = document.getElementById('modalTag');
+        var modalClose = document.getElementById('modalClose');
+
+        function openModal(clip) {
+            modalVideo.innerHTML = '<iframe src="https://www.youtube.com/embed/' + clip.videoId + '?autoplay=1&rel=0" allowfullscreen allow="autoplay; encrypted-media"></iframe>';
+            modalTitle.textContent = clip.title;
+            modalDate.textContent = clip.date;
+            modalTag.textContent = clip.tag;
+
+            modal.classList.add('active', 'entering');
+            document.body.classList.add('modal-open');
+
+            // Trigger reflow then remove entering class for animation
+            modal.offsetHeight;
+            modal.classList.remove('entering');
+        }
+
+        function closeModal() {
+            modal.classList.remove('active');
+            document.body.classList.remove('modal-open');
+            modalVideo.innerHTML = '';
+        }
+
+        modalClose.addEventListener('click', closeModal);
+
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) closeModal();
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && modal.classList.contains('active')) {
+                closeModal();
             }
         });
-    </script>
-
-    <!-- Add Clip modal logic -->
-    <script>
-        (function() {
-            var btn = document.getElementById('addClipBtn');
-            var modal = document.getElementById('clipModal');
-            var cancel = document.getElementById('modalCancel');
-            var submit = document.getElementById('modalSubmit');
-            var errorEl = document.getElementById('modalError');
-
-            btn.addEventListener('click', function() {
-                modal.classList.add('active');
-                errorEl.textContent = '';
-                document.getElementById('clipPassword').value = '';
-                document.getElementById('clipUrl').value = '';
-                document.getElementById('clipTitle').value = '';
-                document.getElementById('clipPassword').focus();
-            });
-
-            cancel.addEventListener('click', function() {
-                modal.classList.remove('active');
-            });
-
-            modal.addEventListener('click', function(e) {
-                if (e.target === modal) modal.classList.remove('active');
-            });
-
-            submit.addEventListener('click', function() {
-                errorEl.textContent = '';
-                var password = document.getElementById('clipPassword').value;
-                var url = document.getElementById('clipUrl').value;
-                var title = document.getElementById('clipTitle').value;
-
-                if (!password || !url || !title) {
-                    errorEl.textContent = 'All fields are required.';
-                    return;
-                }
-
-                submit.disabled = true;
-                submit.textContent = 'Adding...';
-
-                fetch('/add-clip', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ password: password, url: url, title: title })
-                })
-                .then(function(res) { return res.json().then(function(data) { return { ok: res.ok, data: data }; }); })
-                .then(function(result) {
-                    if (result.ok) {
-                        location.reload();
-                    } else {
-                        errorEl.textContent = result.data.error || 'Something went wrong.';
-                        submit.disabled = false;
-                        submit.textContent = 'Add Clip';
-                    }
-                })
-                .catch(function() {
-                    errorEl.textContent = 'Network error. Is the server running?';
-                    submit.disabled = false;
-                    submit.textContent = 'Add Clip';
-                });
-            });
-        })();
-    </script>
-
-
-    <!-- YouTube IFrame API: custom replay button on video end -->
-    <script>
-        (function() {
-            var REPLAY_SVG = '<svg viewBox="0 0 24 24"><path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/></svg>';
-
-            function prepareIframes() {
-                var wrappers = document.querySelectorAll('.video-wrapper');
-                for (var i = 0; i < wrappers.length; i++) {
-                    var wrapper = wrappers[i];
-                    var iframe = wrapper.querySelector('iframe');
-                    if (!iframe) continue;
-
-                    // Assign unique id
-                    iframe.id = 'yt-player-' + i;
-
-                    // Enable JS API on the iframe src
-                    var src = iframe.getAttribute('src') || '';
-                    if (src.indexOf('enablejsapi') === -1) {
-                        iframe.src = src + (src.indexOf('?') === -1 ? '?' : '&') + 'enablejsapi=1';
-                    }
-
-                    // Create replay overlay
-                    var overlay = document.createElement('div');
-                    overlay.className = 'replay-overlay';
-                    overlay.setAttribute('data-player-id', iframe.id);
-
-                    var btn = document.createElement('button');
-                    btn.className = 'replay-btn';
-                    btn.setAttribute('aria-label', 'Replay video');
-                    btn.innerHTML = REPLAY_SVG;
-
-                    overlay.appendChild(btn);
-                    wrapper.appendChild(overlay);
-                }
-            }
-
-            prepareIframes();
-
-            // Load YouTube IFrame API
-            var tag = document.createElement('script');
-            tag.src = 'https://www.youtube.com/iframe_api';
-            var firstScript = document.getElementsByTagName('script')[0];
-            firstScript.parentNode.insertBefore(tag, firstScript);
-
-            // Called automatically by the YouTube IFrame API once loaded
-            window.onYouTubeIframeAPIReady = function() {
-                var iframes = document.querySelectorAll('.video-wrapper iframe');
-                for (var i = 0; i < iframes.length; i++) {
-                    (function(iframe) {
-                        var wrapper = iframe.parentElement;
-                        var overlay = wrapper.querySelector('.replay-overlay');
-                        var replayBtn = overlay.querySelector('.replay-btn');
-
-                        var player = new YT.Player(iframe.id, {
-                            events: {
-                                onStateChange: function(event) {
-                                    if (event.data === YT.PlayerState.ENDED) {
-                                        overlay.classList.add('show');
-                                    } else if (event.data === YT.PlayerState.PLAYING) {
-                                        overlay.classList.remove('show');
-                                    }
-                                }
-                            }
-                        });
-
-                        replayBtn.addEventListener('click', function() {
-                            player.seekTo(0);
-                            player.playVideo();
-                            overlay.classList.remove('show');
-                        });
-                    })(iframes[i]);
-                }
-            };
-        })();
     </script>
 
 </body>
