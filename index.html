@@ -781,27 +781,40 @@
         // CLIP DATA
         // ==========================================
         var clips = [
-            { id: 1,  title: "Wrestle for the Ball",                    date: "Feb 8",  tag: "HUSTLE",  videoId: "YfqaPLXb5OQ" },
-            { id: 2,  title: "Quick to the Paint Layup",                date: "Feb 8",  tag: "OFFENSE", videoId: "q2goPYTCFU8" },
-            { id: 3,  title: "Great Play",                              date: "Feb 8",  tag: "OFFENSE", videoId: "aRYveQX8mrk" },
-            { id: 4,  title: "Epic Block",                              date: "Feb 1",  tag: "DEFENSE", videoId: "wO08Zoo8_yI" },
-            { id: 5,  title: "3 Pointer",                               date: "Feb 1",  tag: "OFFENSE", videoId: "mfPTIPFJ3Q4" },
-            { id: 6,  title: "3 Pointer",                               date: "Feb 1",  tag: "OFFENSE", videoId: "fSjj15HjwOc" },
-            { id: 7,  title: "Put Back",                                date: "Feb 1",  tag: "OFFENSE", videoId: "1cuSjBGRdqg" },
-            { id: 8,  title: "Fast Break Layup",                        date: "Feb 1",  tag: "OFFENSE", videoId: "C2wvALNrk_A" },
-            { id: 9,  title: "Steal and Lay Up",                        date: "Jan 25", tag: "OFFENSE", videoId: "7wyL8ckP4Gg" },
-            { id: 10, title: "Steal, Free Throws, Steal",               date: "Jan 25", tag: "HUSTLE",  videoId: "N6NF9gWMfGY" },
-            { id: 11, title: "Steal and Both Free Throws",              date: "Jan 25", tag: "OFFENSE", videoId: "2Ys3XeLCoc0" },
-            { id: 12, title: "Lay-up!",                                 date: "Jan 18", tag: "OFFENSE", videoId: "tzybTPNs5iI" }
+            { id: 1,  title: "Lay Up",                                  date: "Apr 12", tag: "OFFENSE", videoId: "16Yy84alaa8" },
+            { id: 2,  title: "Good Hustle Defence",                     date: "Apr 12", tag: ["HUSTLE", "DEFENSE"], videoId: "rWYFrb_xwJw" },
+            { id: 3,  title: "Steal - Steal Back - Jump Ball",          date: "Apr 12", tag: "DEFENSE", videoId: "uXNCsQi475g" },
+            { id: 4,  title: "Contested Lay Up",                        date: "Feb 15", tag: "OFFENSE", videoId: "0xORoctobRk" },
+            { id: 5,  title: "Wrestle for the Ball",                    date: "Feb 8",  tag: "HUSTLE",  videoId: "YfqaPLXb5OQ" },
+            { id: 6,  title: "Quick to the Paint Layup",                date: "Feb 8",  tag: "OFFENSE", videoId: "q2goPYTCFU8" },
+            { id: 7,  title: "Great Play",                              date: "Feb 8",  tag: "OFFENSE", videoId: "aRYveQX8mrk" },
+            { id: 8,  title: "Epic Block",                              date: "Feb 1",  tag: "DEFENSE", videoId: "wO08Zoo8_yI" },
+            { id: 9,  title: "3 Pointer",                               date: "Feb 1",  tag: "OFFENSE", videoId: "mfPTIPFJ3Q4" },
+            { id: 10, title: "3 Pointer",                               date: "Feb 1",  tag: "OFFENSE", videoId: "fSjj15HjwOc" },
+            { id: 11, title: "Put Back",                                date: "Feb 1",  tag: "OFFENSE", videoId: "1cuSjBGRdqg" },
+            { id: 12, title: "Fast Break Layup",                        date: "Feb 1",  tag: "OFFENSE", videoId: "C2wvALNrk_A" },
+            { id: 13, title: "Steal and Lay Up",                        date: "Jan 25", tag: "OFFENSE", videoId: "7wyL8ckP4Gg" },
+            { id: 14, title: "Steal, Free Throws, Steal",               date: "Jan 25", tag: "HUSTLE",  videoId: "N6NF9gWMfGY" },
+            { id: 15, title: "Steal and Both Free Throws",              date: "Jan 25", tag: "OFFENSE", videoId: "2Ys3XeLCoc0" },
+            { id: 16, title: "Lay-up!",                                 date: "Jan 18", tag: "OFFENSE", videoId: "tzybTPNs5iI" }
         ];
 
         // ==========================================
         // TAG COUNTS & FILTER BUTTONS
         // ==========================================
+        function clipHasTag(clip, tag) {
+            if (Array.isArray(clip.tag)) return clip.tag.indexOf(tag) !== -1;
+            return clip.tag === tag;
+        }
+        function clipTagDisplay(clip) {
+            if (Array.isArray(clip.tag)) return clip.tag.join(' / ');
+            return clip.tag;
+        }
+
         var tags = ['ALL', 'OFFENSE', 'DEFENSE', 'HUSTLE'];
         var tagCounts = {};
         tags.forEach(function(t) {
-            tagCounts[t] = t === 'ALL' ? clips.length : clips.filter(function(c) { return c.tag === t; }).length;
+            tagCounts[t] = t === 'ALL' ? clips.length : clips.filter(function(c) { return clipHasTag(c, t); }).length;
         });
 
         var filtersContainer = document.getElementById('tagFilters');
@@ -820,7 +833,7 @@
 
         function renderClips(filter) {
             grid.innerHTML = '';
-            var visible = filter === 'ALL' ? clips : clips.filter(function(c) { return c.tag === filter; });
+            var visible = filter === 'ALL' ? clips : clips.filter(function(c) { return clipHasTag(c, filter); });
 
             document.getElementById('clipCountLabel').textContent = visible.length + ' clip' + (visible.length !== 1 ? 's' : '');
 
@@ -845,7 +858,7 @@
                         '<div class="clip-title">' + clip.title + '</div>' +
                         '<div class="clip-meta">' +
                             '<span class="clip-date">' + clip.date + '</span>' +
-                            '<span class="clip-tag">' + clip.tag + '</span>' +
+                            '<span class="clip-tag">' + clipTagDisplay(clip) + '</span>' +
                         '</div>' +
                     '</div>';
 
@@ -884,7 +897,7 @@
             modalVideo.innerHTML = '<iframe src="https://www.youtube.com/embed/' + clip.videoId + '?autoplay=1&rel=0" allowfullscreen allow="autoplay; encrypted-media"></iframe>';
             modalTitle.textContent = clip.title;
             modalDate.textContent = clip.date;
-            modalTag.textContent = clip.tag;
+            modalTag.textContent = clipTagDisplay(clip);
 
             modal.classList.add('active', 'entering');
             document.body.classList.add('modal-open');
